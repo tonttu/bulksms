@@ -39,7 +39,7 @@ module Net
 				attr_reader :account
 
 				def initialize(username, password, country = 'uk')
-					@account = Account.new(username, password, country)
+					@account = BulkSmsAccount.new(username, password, country)
           @country=country
 				end
 

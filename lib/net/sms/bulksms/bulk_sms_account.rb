@@ -6,7 +6,7 @@ module Net
 		module BulkSMS
 
 			# Wraps up the functionality for a user account on the system
-			class Account
+			class BulkSmsAccount
 
 				# The port the account service runs on
 				SERVICE_PORT = 7512
