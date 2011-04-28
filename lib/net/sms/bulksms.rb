@@ -1,7 +1,7 @@
 # Author::		Luke Redpath (mailto:contact@lukeredpath.co.uk)
 # License::		MIT
 
-require File.dirname(__FILE__) + '/bulksms/account'
+require File.dirname(__FILE__) + '/bulksms/bulk_sms_account'
 require File.dirname(__FILE__) + '/bulksms/message'
 require File.dirname(__FILE__) + '/bulksms/response'
 
@@ -30,22 +30,22 @@ module Net
 					
 			class Service
 				# The port the message service rus on
-				MESSAGE_SERVICE_PORT = 80 #5567
+				MESSAGE_SERVICE_PORT = 5567
 
 				# Path to the message service gateway
 				MESSAGE_SERVICE_PATH = '/eapi/submission/send_sms/2/2.0'
 
 				# returns an Account object for the credentials supplied to the service
-				attr_reader :account
+				attr_reader :bulk_sms_account
 
-				def initialize(username, password, country = 'uk')
-					@account = BulkSmsAccount.new(username, password, country)
+				def initialize(username, password, country = 'international')
+					@bulk_sms_account = BulkSmsAccount.new(username, password, country)
           @country=country
 				end
 
 				# Sends the given Message object to the gateway for delivery
 				def send_message(msg)
-					payload = [@account.to_http_query, msg.to_http_query].join('&')
+					payload = [@bulk_sms_account.to_http_query, msg.to_http_query].join('&')
 					Net::HTTP.start(host(@country), MESSAGE_SERVICE_PORT) do |http|
 						resp = http.post(MESSAGE_SERVICE_PATH, payload)
 						Response.parse(resp.body)
@@ -56,7 +56,7 @@ module Net
           responses=[]
           Net::HTTP.start(host(@country), MESSAGE_SERVICE_PORT) do |http|
             messages.each do |msg|
-              payload = [@account.to_http_query, msg.to_http_query].join('&')
+              payload = [@bulk_sms_account.to_http_query, msg.to_http_query].join('&')
               resp = http.post(MESSAGE_SERVICE_PATH, payload)
               responses << Response.parse(resp.body)
             end
