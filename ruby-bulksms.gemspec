@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
                 "ruby-bulksms.gemspec", 
                 "README",
                 "lib/ruby-bulksms.rb",
-                "lib/net/sms/bulksms/account.rb",
+                "lib/net/sms/bulksms/bulk_sms_account.rb",
                 "lib/net/sms/bulksms/message.rb",
                 "lib/net/sms/bulksms/response.rb",
                 "lib/net/sms/bulksms.rb"
