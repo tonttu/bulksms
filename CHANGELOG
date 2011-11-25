@@ -1,4 +1,10 @@
-*0.4
+* 0.5.0
+Completely re-written.
+Simple API via Bulksms module.
+Support for configuration object.
+Railtie links for Rails > 3.X configurations.
+
+* 0.4
 Adding method send_multiple to bulksms.rb file 
 
 * 0.3

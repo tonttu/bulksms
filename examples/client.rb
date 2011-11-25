@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + '/../lib/net/sms/bulksms'
-include Net::SMS::BulkSMS
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
-puts "\nWelcome to the Ruby BulkSMS Sender!"
-puts "------------------------------------\n\n"
+require 'bulksms'
+
+puts "\nWelcome to the BulkSMS Sender!"
+puts "--------------------------------\n\n"
 
 print 'Please enter your account username: '
 username = gets.strip
@@ -10,19 +11,27 @@ username = gets.strip
 print 'Please enter your account password: '
 password = gets.strip
 
-print 'Please enter your account country: '
+print 'Please enter your account country: (international)'
 country = gets.strip
+country = country.to_s.empty? ? :international : country.to_sym
 
 puts "\nChecking...\n\n"
 
-# lets load up the service now
-@service = Service.new(username, password,country)
+# set the configuration details
+Bulksms.config do |c|
+  c.username = username
+  c.password = password
+  c.country = country
+end
 
 begin
-	puts "Welcome back #{username}. You have #{@service.account.credits} credits remaining.\n\n"
-rescue AccountError
-	puts "Sorry, there was an error validating your account details. Goodbye!"
-	exit
+  credits = Bulksms.credits
+  puts "Welcome back #{username}. You have #{credits} credits remaining.\n\n"
+rescue Bulksms::AccountError => d
+  puts "Sorry, there was an error validating your account details."
+  puts "\n\t#{d}\n\n"
+  puts "Goodbye."
+  exit
 end
 
 print "Enter the mobile number of the person you want to send an SMS to: "
@@ -33,17 +42,15 @@ message = gets.strip
 
 puts "\nThank you. Processing...\n\n"
 
-msg = Message.new(message, recipient)
-#msg.test_always_succeed = 1
-msg.routing_group = 2
-response = @service.send_message(msg)
+response = Bulksms.send(:message => message, :recipient => recipient, :test_always_success => 1)
 
-if response.successful?
-	puts "Your SMS was sent successfully.\n\n"
-	puts "You now have #{@service.account.credits} credits remaining."
-	puts "Goodbye!"
+if response.success?
+  puts "Your SMS was sent successfully.\n\n"
+  puts "You now have #{Bulksms.credits} credits remaining."
+  puts "Goodbye!"
 else
-	puts "Sorry, but your SMS was not sent this time. The service returned the error:"
-	puts "\n\t#{response.code}: #{response.description}\n\n"
-	puts "Please try again later. Goodbye."
+  puts "Sorry, but your SMS was not sent this time. The service returned the error:"
+  puts "\n\t#{response.code}: #{response.description}\n\n"
+  puts "Please try again later. Goodbye."
 end
+
