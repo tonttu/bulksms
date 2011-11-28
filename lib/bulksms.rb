@@ -32,11 +32,11 @@ module Bulksms
   # An array of messages may also be provided to send multiple SMS
   # in the same HTTP connection.
   #
-  def send(*args)
+  def deliver(*args)
     msg  = args.shift
     opts = args.shift || {}
     service = Service.new(opts)
-    service.send(msg)
+    service.deliver(msg)
   end
 
   # Request the number of credits available in your account.

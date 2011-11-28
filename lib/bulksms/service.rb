@@ -2,15 +2,14 @@ module Bulksms
 
   class Service
 
-    attr_accessor :account, :sender
+    attr_accessor :account
 
     def initialize(opts = {})
       @account = Account.new(opts)
-      @sender = opts[:sender]
     end
 
     # Send a single message or multiple messages.
-    def send(*args)
+    def deliver(*args)
       msg = args.shift
       opts = args.shift || {}
       case msg

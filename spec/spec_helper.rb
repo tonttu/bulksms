@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require 'fakeweb'
 require 'bulksms'
 
 RSpec.configure do |config|

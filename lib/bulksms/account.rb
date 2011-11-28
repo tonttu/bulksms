@@ -24,7 +24,7 @@ module Bulksms
       res.result.to_f
     end
 
-    def request(path, params = {}, &block)
+    def request(path, params = {})
       response = nil
       connection do |http|
         if params.is_a?(Array)
@@ -35,6 +35,8 @@ module Bulksms
       end
       response
     end
+
+    protected
 
     def post(http, path, params = {})
       payload = params_to_query_string(to_params.merge(params))
@@ -47,8 +49,6 @@ module Bulksms
         yield http
       end
     end
-
-    protected
 
     def params_to_query_string(params)
       URI.encode(params.collect{|x,y| "#{x}=#{y}"}.join('&'))

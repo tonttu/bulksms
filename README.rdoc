@@ -35,13 +35,13 @@ If Rails is available, the library can be configured using the standard environm
 
 Sending a quick message is very simple:
 
-  Bulksms.send(:message => 'Hello, I hope you like my message!', :recipient => '44799123456')
+  Bulksms.deliver(:message => 'Hello, I hope you like my message!', :recipient => '44799123456')
 
 == Multiple messages
 
 Provide an array of hashes and multiple messages will be sent via the same HTTP connection:
 
-  Bulksms.send([{:message => 'Test Message', :recipient => "44342134131"}, {:message => "Another Msg", :recipient => "4441234354254"}])
+  Bulksms.deliver([{:message => 'Test Message', :recipient => "44342134131"}, {:message => "Another Msg", :recipient => "4441234354254"}])
 
 == Additional message options
 
@@ -51,7 +51,7 @@ If you prefer more control, the <tt>Service</tt> and <tt>Message</tt> objects ar
   m = Bulksms::Message.new(:message => "Test Message", :recipient => "34901123123")
   m.routing_group = 1
   m.want_report = 1
-  s.send(m)
+  s.deliver(m)
 
 
 ==  Checking your account balance
