@@ -72,6 +72,8 @@ Rspec from the console:
 
   rspec spec
 
+Tests still need a bit more work to cover all cases.
+
 = Authors
 
 The Original work on "ruby-bulksms" was made by Luke Redpath (email:contact@lukeredpath.co.uk). Modifications were added by Basayel Said (email:eng.basayel.said@gmail.com).

@@ -54,6 +54,33 @@ describe Bulksms::Account do
 
     end
 
+    describe "#request" do
+      # TODO: fix: These tests are slightly flawed as they do not test the parameters.
+
+      before :all do
+        @conf = Bulksms.config
+      end
+
+      it "will send single request to server" do
+        FakeWeb.register_uri(:post, "http://#{@conf.host}:#{@conf.port}/test", {:body => "0|OK|1234"})
+        @account.request("/test", {:foo => :bar}).success?.should be_true
+      end
+
+      it "will send bad single request to server" do
+        FakeWeb.register_uri(:post, "http://#{@conf.host}:#{@conf.port}/test", {:body => "22|Internal fatal error|1234"})
+        @account.request("/test", {:foo => :bar}).success?.should be_false
+      end
+
+      it "will send multiple requests to server" do
+        FakeWeb.register_uri(:post, "http://#{@conf.host}:#{@conf.port}/test", [{:body => "0|OK|1234"}, {:body => "0|OK|1234"}])
+        res = @account.request("/test", [{:foo => :bar}, {:foo => :bar}])
+        res.should be_a(Array)
+        res[0].success?.should be_true
+        res[1].success?.should be_true
+      end
+
+    end
+
   end
 
 end
