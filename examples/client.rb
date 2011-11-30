@@ -42,7 +42,7 @@ message = gets.strip
 
 puts "\nThank you. Processing...\n\n"
 
-response = Bulksms.send(:message => message, :recipient => recipient, :test_always_success => 1)
+response = Bulksms.deliver(:message => message, :recipient => recipient)
 
 if response.success?
   puts "Your SMS was sent successfully.\n\n"
