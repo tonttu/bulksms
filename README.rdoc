@@ -85,4 +85,5 @@ Modifications include:
 * simple helper module for direct access to classes
 * DRYer support libraries
 * Railtie support for configuration
+* Encoding messages correctly
 
