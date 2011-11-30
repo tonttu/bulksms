@@ -9,7 +9,7 @@ describe Bulksms::Configuration do
   describe "accessors" do
     it "should be provided" do
       [:username, :password, :country, :host, :port, :message_path,
-        :credits_path, :message_class].each do |accessor|
+        :credits_path, :message_class, :routing_group].each do |accessor|
         @config.should respond_to accessor
       end
     end
@@ -23,6 +23,7 @@ describe Bulksms::Configuration do
       @config.message_path.should_not be_empty
       @config.credits_path.should_not be_empty
       @config.message_class.should eql(2)
+      @config.routing_group.should eql(2)
     end
 
   end

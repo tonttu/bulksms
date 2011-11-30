@@ -15,6 +15,14 @@ describe Bulksms::Message do
       @msg.recipient.should eql("1234")
     end
 
+    it "should allow overrides" do
+      @msg = Bulksms::Message.new :message => "foo", :recipient => '1234', :routing_group => 3,
+        :test_always_succeed => 1, :message_class => 1
+      @msg.routing_group.should eql(3)
+      @msg.msg_class.should eql(1)
+      @msg.test_always_succeed.should eql(1)
+    end
+
   end
 
 

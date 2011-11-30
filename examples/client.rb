@@ -22,6 +22,7 @@ Bulksms.config do |c|
   c.username = username
   c.password = password
   c.country = country
+  c.routing_group = 3 # Normally 2!
 end
 
 begin
@@ -50,7 +51,7 @@ if response.success?
   puts "Goodbye!"
 else
   puts "Sorry, but your SMS was not sent this time. The service returned the error:"
-  puts "\n\t#{response.code}: #{response.description}\n\n"
+  puts "\n\t#{response.code}: #{response.result}\n\n"
   puts "Please try again later. Goodbye."
 end
 

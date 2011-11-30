@@ -1,3 +1,6 @@
+
+require 'cgi'
+
 module Bulksms
 
   class AccountError < Exception; end
@@ -51,7 +54,7 @@ module Bulksms
     end
 
     def params_to_query_string(params)
-      URI.encode(params.collect{|x,y| "#{x}=#{y}"}.join('&'))
+      params.collect{|k,v| "#{k}=#{CGI.escape(v.to_s)}"}.join('&')
     end
 
   end

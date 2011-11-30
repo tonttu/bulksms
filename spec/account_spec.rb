@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 require 'spec_helper'
 
@@ -79,6 +80,15 @@ describe Bulksms::Account do
         res[1].success?.should be_true
       end
 
+    end
+
+    describe "#params_to_query_string" do
+      it "converts params to string" do
+        txt = @account.send(:params_to_query_string, :msg => "Random çharacters -and- symbols +34123123123", :some => :symbol)
+        txt.should include("Random+%C3%A7hara")
+        txt.should include("%2B34123")
+        txt.should include("some=symbol")
+      end
     end
 
   end
