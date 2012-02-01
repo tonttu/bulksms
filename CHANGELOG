@@ -1,3 +1,9 @@
+* 0.5.2
+Added mappings for special characters including euro symbol according to Bulksms api.
+
+* 0.5.1
+Fixing issues with encoding.
+
 * 0.5.0
 Completely re-written.
 Simple API via Bulksms module.

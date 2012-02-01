@@ -83,12 +83,23 @@ describe Bulksms::Account do
     end
 
     describe "#params_to_query_string" do
-      it "converts params to string" do
-        txt = @account.send(:params_to_query_string, :msg => "Random çharacters -and- symbols +34123123123", :some => :symbol)
-        txt.should include("Random+%C3%A7hara")
+      it "converts normal params to string" do
+        txt = @account.send(:params_to_query_string, :msg => "Random cháráctérs -and- symbols +34123123123", :some => :symbol)
+        txt.should include("Random+ch%E1r%E1ct%E9")
         txt.should include("%2B34123")
         txt.should include("some=symbol")
       end
+
+      it "converts special characters in params to string" do
+        txt = @account.send(:params_to_query_string, :msg => "[special] {characters} tilde~ pipe| hat^ euro€")
+        txt.should include("%BB%3Cspecial%BB%3E")
+        txt.should include("%BB%28characters%BB%29")
+        txt.should include("tilde%BB%3D")
+        txt.should include("pipe%BB%40")
+        txt.should include("hat%BB%14")
+        txt.should include("euro%BB%65")
+      end
+
     end
 
   end

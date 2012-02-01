@@ -53,6 +53,11 @@ If you prefer more control, the <tt>Service</tt> and <tt>Message</tt> objects ar
   m.want_report = 1
   s.deliver(m)
 
+== Encoding
+
+All messages will be converted to ISO-8859-15 before being sent to the Bulksms servers. Some special characters, including the euro symbol, will be converted and prepended with a special escape character, suitable for GSM-7, so that they will be received correctly. For more details on character encoding, checkout the Bulksms API:
+
+  http://www.bulksms.com/int/docs/eapi/submission/character_encoding/
 
 ==  Checking your account balance
 
