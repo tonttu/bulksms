@@ -51,6 +51,14 @@ module Bulksms
       response
     end
 
+    # return size of utf8 string encoded for GSM network
+    def self.string_length(utf8_string)
+      CGI.escape(Iconv.iconv('ISO-8859-15//ignore', 'UTF-8', utf8_string)[0]).gsub(/%[0-9A-F]{2}/) do |match|
+        code = GSM0338_EXTENDED_MAP[match]
+        code ? "%BB%#{code}" : match
+      end.length
+    end
+
     protected
 
     def post(http, path, params = {})
