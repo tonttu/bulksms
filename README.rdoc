@@ -67,9 +67,17 @@ Use the main module to request the current user's balance:
 
 A <tt>Bulksms::AccountError</tt> will be raised if there is a problem.
 
+= Status reports
+
+Get status report of a message is very simple:
+
+  Bulksms.report(:batch_id => 123456789)
+
+You can obtain batch_id from response when you send a sms with Bulksms.deliver.
+
 = Limitations
 
-This library currently only implements a small portion of the API, allowing you to send messages and check your account balance. Further parts of the BulkSMS API may be implemented in the future such as the ability to receive messages and status reports and manage the address book provided by BulkSMS.
+This library currently only implements a small portion of the API, allowing you to send messages and check your account balance and status reports. Further parts of the BulkSMS API may be implemented in the future such as the ability to receive messages and manage the address book provided by BulkSMS.
 
 = Testing
 
