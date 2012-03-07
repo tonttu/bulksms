@@ -16,7 +16,7 @@ module Bulksms
       @message = opts[:message]
       @recipient = opts[:recipient]
       @msg_class = opts[:message_class] || Bulksms.config.message_class
-      @want_report = 0
+      @want_report = opts[:want_report] || 1
       @routing_group = opts[:routing_group] || Bulksms.config.routing_group
       @source_id = ''
       @test_always_succeed = opts[:test_always_succeed] || 0
