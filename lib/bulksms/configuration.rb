@@ -20,6 +20,9 @@ module Bulksms
     # Path added to host to request credits
     attr_accessor :credits_path
 
+    # Path added to host to get report
+    attr_accessor :report_path
+
     # Message Class, 0 (Flash SMS), 1, 2 (default, normal SMS, stored to SIM card), 3.
     attr_accessor :message_class
 
@@ -32,6 +35,7 @@ module Bulksms
       self.port = 5567
       self.message_path = "/eapi/submission/send_sms/2/2.0"
       self.credits_path = "/eapi/user/get_credits/1/1.1"
+      self.report_path  = "/eapi/status_reports/get_report/2/2.0"
       self.message_class = 2
       self.routing_group = 2
     end

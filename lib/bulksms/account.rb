@@ -30,6 +30,15 @@ module Bulksms
       res.result.to_f
     end
 
+    def report(path, args = {})
+      payload = to_params.merge(args).collect{|k,v| "#{k}=#{v.to_s}"}.join('&')
+      response = nil
+      connection do |http|
+        response = http.post path, payload
+      end
+      ResponseReport.parse(response.body)
+    end
+
     def request(path, params = {})
       response = nil
       connection do |http|

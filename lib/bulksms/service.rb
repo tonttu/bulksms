@@ -21,6 +21,14 @@ module Bulksms
       send_request(msg)
     end
 
+    def report(*args)
+      batch_id = args.shift
+      opts     = args.shift || { }
+      raise "Missing batch_id!" if batch_id[:batch_id].to_s.empty?
+      
+      @account.report Bulksms.config.report_path, batch_id.merge(opts)
+    end
+
     protected
 
     def send_request(msg)

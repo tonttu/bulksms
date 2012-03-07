@@ -7,6 +7,7 @@ require "bulksms/message"
 require "bulksms/account"
 require "bulksms/service"
 require "bulksms/response"
+require "bulksms/response_report"
 
 if defined?(Rails)
   require "bulksms/railtie"
@@ -45,6 +46,19 @@ module Bulksms
     opts = args.last || { }
     account = Account.new(opts)
     account.credits
+  end
+
+  # Example :
+  # {
+  #   :batch_id => 345889136
+  # }
+  # Other options available, by example :  :optional_fields => "body,completed_time"
+  # (see https://bulksms.vsms.net/docs/eapi/status_reports/get_report for more informations)
+  def report(*args)
+    batch_id = args.shift
+    opts     = args.shift || { }
+    service = Service.new(opts)
+    service.report(batch_id.merge(opts))
   end
 
 end
