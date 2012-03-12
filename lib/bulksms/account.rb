@@ -53,10 +53,20 @@ module Bulksms
 
     # return size of utf8 string encoded for GSM network
     def self.string_length(utf8_string)
+      utf8_string = Account.remove_accents utf8_string
       CGI.escape(Iconv.iconv('ISO-8859-15//ignore', 'UTF-8', utf8_string)[0]).gsub(/%[0-9A-F]{2}/) do |match|
         code = GSM0338_EXTENDED_MAP[match]
         code ? "%BB%#{code}" : match
       end.length
+    end
+
+    def self.remove_accents string
+      UNSUPPORTED_ACCENTS.each {|letter,accents|
+        packed = accents.pack('U*')
+        rxp = Regexp.new("[#{packed}]", nil)
+        string.gsub!(rxp, letter)
+      }
+      string
     end
 
     protected
@@ -78,6 +88,7 @@ module Bulksms
     end
 
     def encode_cgi_string(string)
+      string = Account.remove_accents string
       CGI.escape(Iconv.iconv('ISO-8859-15//ignore', 'UTF-8', string)[0]).gsub(/%[0-9A-F]{2}/) do |match|
         code = GSM0338_EXTENDED_MAP[match]
         code ? "%BB%#{code}" : match
@@ -95,6 +106,26 @@ module Bulksms
       '%7C' => '40', # |
       '%A4' => '65', # EURO
     }
+
+    # Table of unsupported accented characters in charset GSM 03.38
+    UNSUPPORTED_ACCENTS = {
+    'E' => [200,202,203],
+    'e' => [234,235],
+    'A' => [192,193,194,195],
+    'a' => [225,226,227],
+    'c' => [231],
+    'O' => [210,211,212,213],
+    'o' => [243,244,245],
+    'I' => [204,205,206,207],
+    'i' => [237,238,239],
+    'U' => [217,218,219],
+    'u' => [250,251],
+    'Y' => [221],
+    'y' => [253,255],
+    'ae' => [346],
+    'OE' => [188],
+    'oe' => [189]
+  }
 
   end
 
