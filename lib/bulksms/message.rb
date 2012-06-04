@@ -24,6 +24,14 @@ module Bulksms
       @concat_text_sms = 0
       @concat_max_parts = 2
       @dca = opts[:dca] || "7bit"
+
+      convert_message_to_sms_unicode if @dca == "16bit"
+    end
+
+    def convert_message_to_sms_unicode
+      msg = []
+      @message.each_char{|c| msg.push ('%4s' % c.unpack('U')[0].to_s(16)).gsub(' ', '0') }
+      @message = msg.join
     end
 
     # Returns a message as a http query string for use
