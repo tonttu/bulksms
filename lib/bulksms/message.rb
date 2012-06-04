@@ -23,6 +23,7 @@ module Bulksms
       @test_always_fail = opts[:test_always_fail] || 0
       @concat_text_sms = 0
       @concat_max_parts = 2
+      @dca = opts[:dca] || "7bit"
     end
 
     # Returns a message as a http query string for use
@@ -40,7 +41,8 @@ module Bulksms
         'test_always_succeed' => @test_always_succeed,
         'test_always_fail' => @test_always_fail,
         'allow_concat_text_sms' => @concat_text_sms,
-        'concat_text_sms_max_parts' => @concat_max_parts
+        'concat_text_sms_max_parts' => @concat_max_parts,
+        'dca' => @dca
       }
     end
   end
