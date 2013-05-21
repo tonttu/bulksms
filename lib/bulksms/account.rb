@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'cgi'
-require 'iconv'
 
 module Bulksms
 
@@ -54,7 +53,7 @@ module Bulksms
     # return size of utf8 string encoded for GSM network
     def self.string_length(utf8_string)
       utf8_string = Account.remove_accents utf8_string
-      CGI.escape(Iconv.iconv('ISO-8859-15//ignore', 'UTF-8', utf8_string)[0]).gsub(/%[0-9A-F]{2}/) do |match|
+      CGI.escape(utf8_string.encode('ISO-8859-15')).gsub(/%[0-9A-F]{2}/) do |match|
         code = GSM0338_EXTENDED_MAP[match]
         code ? "%BB%#{code}" : match
       end.length
@@ -89,7 +88,7 @@ module Bulksms
 
     def encode_cgi_string(string)
       string = Account.remove_accents string
-      CGI.escape(Iconv.iconv('ISO-8859-15//ignore', 'UTF-8', string)[0]).gsub(/%[0-9A-F]{2}/) do |match|
+      CGI.escape(string.encode('ISO-8859-15')).gsub(/%[0-9A-F]{2}/) do |match|
         code = GSM0338_EXTENDED_MAP[match]
         code ? "%BB%#{code}" : match
       end
