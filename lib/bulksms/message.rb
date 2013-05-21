@@ -21,8 +21,8 @@ module Bulksms
       @source_id = ''
       @test_always_succeed = opts[:test_always_succeed] || 0
       @test_always_fail = opts[:test_always_fail] || 0
-      @concat_text_sms = 0
-      @concat_max_parts = 2
+      @concat_text_sms = opts[:concat_text_sms] || 0
+      @concat_max_parts = opts[:concat_max_parts] || 2
       @dca = opts[:dca] || "7bit"
 
       convert_message_to_sms_unicode if @dca == "16bit"
