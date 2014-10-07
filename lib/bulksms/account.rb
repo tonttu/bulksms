@@ -51,12 +51,8 @@ module Bulksms
     end
 
     # return size of utf8 string encoded for GSM network
-    def self.string_length(utf8_string)
-      utf8_string = Account.remove_accents utf8_string
-      CGI.escape(utf8_string.encode('ISO-8859-15')).gsub(/%[0-9A-F]{2}/) do |match|
-        code = GSM0338_EXTENDED_MAP[match]
-        code ? "%BB%#{code}" : match
-      end.length
+    def string_length(utf8_string)
+      encode_cgi_string(utf8_string).length
     end
 
     def self.remove_accents string
@@ -87,8 +83,22 @@ module Bulksms
     end
 
     def encode_cgi_string(string)
-      string = Account.remove_accents string
-      CGI.escape(string.encode('ISO-8859-15')).gsub(/%[0-9A-F]{2}/) do |match|
+      string = Account.remove_accents(string)
+      
+      ISO_8859_15_MAP.each do |from, to|
+        string.gsub!(from, to)
+      end
+            
+      encoded = []
+      string.each_char do |c|
+        begin
+          encoded.push(c.encode('ISO-8859-15'))
+        rescue Encoding::UndefinedConversionError => e
+          encoded.push('?')
+        end
+      end
+      encoded = encoded.join
+      CGI.escape(encoded).gsub(/%[0-9A-F]{2}/) do |match|
         code = GSM0338_EXTENDED_MAP[match]
         code ? "%BB%#{code}" : match
       end
@@ -108,23 +118,27 @@ module Bulksms
 
     # Table of unsupported accented characters in charset GSM 03.38
     UNSUPPORTED_ACCENTS = {
-    'E' => [200,202,203],
-    'e' => [234,235],
-    'A' => [192,193,194,195],
-    'a' => [225,226,227],
-    'c' => [231],
-    'O' => [210,211,212,213],
-    'o' => [243,244,245],
-    'I' => [204,205,206,207],
-    'i' => [237,238,239],
-    'U' => [217,218,219],
-    'u' => [250,251],
-    'Y' => [221],
-    'y' => [253,255],
-    'ae' => [346],
-    'OE' => [188],
-    'oe' => [189]
-  }
+      'E' => [200,202,203],
+      'e' => [234,235],
+      'A' => [192,193,194,195],
+      'a' => [225,226,227],
+      'c' => [231],
+      'O' => [210,211,212,213],
+      'o' => [243,244,245],
+      'I' => [204,205,206,207],
+      'i' => [237,238,239],
+      'U' => [217,218,219],
+      'u' => [250,251],
+      'Y' => [221],
+      'y' => [253,255],
+      'ae' => [346],
+      'OE' => [188],
+      'oe' => [189]
+    }
+  
+    ISO_8859_15_MAP = {
+      "\u2019" => "'"
+    }
 
   end
 
