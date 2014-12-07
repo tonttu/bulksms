@@ -10,7 +10,8 @@ module Bulksms
     attr_accessor :message, :recipient, :msg_class,
                   :want_report, :routing_group, :source_id,
                   :test_always_succeed, :test_always_fail,
-                  :concat_text_sms, :concat_max_parts, :sender
+                  :concat_text_sms, :concat_max_parts, :sender,
+                  :stop_dup_id
 
     def initialize(opts = {})
       @message = opts[:message]
@@ -25,6 +26,7 @@ module Bulksms
       @concat_max_parts = opts[:concat_max_parts] || 2
       @dca = opts[:dca] || "7bit"
       @sender = opts[:sender]
+      @stop_dup_id = opts[:stop_dup_id]
 
       convert_message_to_sms_unicode if @dca == "16bit"
     end
@@ -40,7 +42,7 @@ module Bulksms
     def to_params
       raise "Missing message!" if @message.to_s.empty?
       raise "Missing recipient!" if @recipient.to_s.empty?
-      {
+      p = {
         'message' => @message,
         'msisdn' => @recipient,
         'msg_class' => @msg_class,
@@ -52,7 +54,10 @@ module Bulksms
         'allow_concat_text_sms' => @concat_text_sms,
         'concat_text_sms_max_parts' => @concat_max_parts,
         'dca' => @dca
-      }.merge(@sender ? {'sender' => @sender} : {})
+      }
+      p['sender'] = @sender if @sender
+      p['stop_dup_id'] = @stop_dup_id if @stop_dup_id
+      p
     end
   end
 
